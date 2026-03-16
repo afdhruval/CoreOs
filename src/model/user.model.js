@@ -1,4 +1,4 @@
-import mongoose, { Model, model, models } from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const userSchema = await mongoose.Schema({
