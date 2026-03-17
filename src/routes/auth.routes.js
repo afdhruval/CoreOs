@@ -9,4 +9,6 @@ authRouter.post("/register", register)
 
 authRouter.get("/verify",verifyEmail) 
 
+authRouter.post("/login", )
+
 export default authRouter
