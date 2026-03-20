@@ -24,7 +24,7 @@ const Login = () => {
                 return
             }
 
-            await handleLogin(email , password)
+            await handleLogin(email, password)
             // 👉 API call example
             // const res = await fetch('/api/login', {...})
 
@@ -35,6 +35,8 @@ const Login = () => {
         } finally {
             setLoading(false)
         }
+
+        navigate("/")
     }
 
     return (
