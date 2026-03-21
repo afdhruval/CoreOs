@@ -7,7 +7,6 @@ const Dashboard = () => {
 
     console.log(user);
 
-
     return (
         <div>Dashboard</div>
     )
