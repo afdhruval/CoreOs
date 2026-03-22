@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-// import { testAi } from "./src/services/ai.service.js";
 dotenv.config({ path: "./.env" });
 import http from "http"
 import { initSocket } from "./src/sockets/server.socket.js";
