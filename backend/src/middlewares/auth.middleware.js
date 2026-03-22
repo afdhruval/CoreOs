@@ -4,7 +4,7 @@ export function authUser(req, res, next) {
 
     const token = req.cookies.token;
 
-    // console.log("cookies:", req.cookies);
+    console.log("cookies:", req.cookies);
 
     if (!token) {
         return res.status(401).json({
@@ -16,7 +16,7 @@ export function authUser(req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // console.log("decoded:", decoded);
+        console.log("decoded:", decoded);
 
         req.user = decoded;
 

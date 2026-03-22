@@ -10,9 +10,9 @@ const httpServer = http.createServer(app)
 
 initSocket(httpServer)
 
-// testAi()
 
 connectTOdb()
+
 httpServer.listen(3000, () => {
     console.log("server is running on 3000");
 })
