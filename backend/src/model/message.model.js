@@ -12,7 +12,7 @@ const messageSchema = await mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["users", "ai"],
+        enum: ["user", "ai"],
         required: true
     },
 },

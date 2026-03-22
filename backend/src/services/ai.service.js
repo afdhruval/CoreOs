@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ChatMistralAI } from "@langchain/mistralai";
-import { HumanMessage, SystemMessage } from "langchain";
+import { HumanMessage, SystemMessage, AIMessage, HumanMessageChunk } from "langchain";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
@@ -15,7 +15,7 @@ const mistralModel = new ChatMistralAI({
 });
 
 
-export async function generateMessage(message) {
+export async function generateMessage(messagess) {
     try {
         const result = await geminiModel.generateContent(message);
         const response = await result.response;
@@ -25,9 +25,13 @@ export async function generateMessage(message) {
     } catch (error) {
         console.log("Gemini failed → switching to Mistral");
 
-        const response = await mistralModel.invoke([
-            new HumanMessage(message)
-        ]);
+        const response = await mistralModel.invoke(messagess.map(msg => {
+            if (msg.role == "user") {
+                return new HumanMessage(msg.content )
+            } else {
+                return new AIMessage(msg.content)
+            }
+        }));
 
         return response.content;
     }
