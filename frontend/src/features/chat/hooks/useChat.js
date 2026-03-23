@@ -17,32 +17,45 @@ export const useChat = () => {
         try {
             dispatch(setLoading(true));
 
-            const data = await sendMessage({ message, chatId });
+            const res = await sendMessage({ message, chatId });
 
-            const { chat, aiMessage } = data;
+            console.log("SEND MESSAGE RESPONSE:", res);
 
-            if (!chatId)
+            const chat = res?.chat;
+            const aiMessage = res?.aiMessage;
+
+            const finalChatId = chatId || chat?._id;
+
+            // ✅ create chat if new
+            if (!chatId && chat) {
                 dispatch(createNewChat({
                     chatId: chat._id,
-                    title: "New Chat"
+                    title: chat.title,
                 }));
+            }
 
+            // ✅ USER MESSAGE
             dispatch(addNewMessage({
-                chatId: chat._id || chatId,
-                content: message,
-                role: "user"
+                chatId: finalChatId,
+                message: {
+                    role: "user",
+                    content: message
+                }
             }));
 
+            // ✅ AI MESSAGE
             dispatch(addNewMessage({
-                chatId: chat._id || chatId,
-                content: aiMessage,
-                role: "ai"
+                chatId: finalChatId,
+                message: {
+                    role: aiMessage?.role || "ai",
+                    content: aiMessage?.content || "No response"
+                }
             }));
 
-            dispatch(setcurrentChatId(chat._id));
+            dispatch(setcurrentChatId(finalChatId));
 
-        } catch (error) {
-            console.log("ERROR:", error);
+        } catch (err) {
+            console.error(err);
         } finally {
             dispatch(setLoading(false));
         }
@@ -53,7 +66,15 @@ export const useChat = () => {
             dispatch(setLoading(true));
 
             const data = await getChats();
-            const chats = data;
+            // console.log("GET CHATS RESPONSE:", data);
+
+            // ✅ FIX: correct key
+            const chats = data?.chat || [];
+
+            if (!Array.isArray(chats)) {
+                console.error("Chats is not array:", chats);
+                return;
+            }
 
             const formattedChats = chats.reduce((acc, chat) => {
                 acc[chat._id] = {
@@ -86,14 +107,17 @@ export const useChat = () => {
             dispatch(setLoading(true));
 
             const data = await getMessages(chatId);
+            console.log("GET MESSAGES RESPONSE:", data);
 
-            const messages = data.messages;
+            const messages = data?.messages || [];
 
             messages.forEach((msg) => {
                 dispatch(addNewMessage({
                     chatId,
-                    content: msg.content,
-                    role: msg.role
+                    message: {
+                        content: msg.content,
+                        role: msg.role
+                    }
                 }));
             });
 

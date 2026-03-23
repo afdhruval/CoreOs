@@ -24,36 +24,33 @@ const chatSlice = createSlice({
             }
         },
 
-       
         addNewMessage: (state, action) => {
-            const { chatId, content, role } = action.payload;
+            const { chatId, message } = action.payload;
 
-         
             if (!state.chats[chatId]) return;
 
-            state.chats[chatId].messages.push({
-                content,
-                role,
-                timestamp: new Date().toISOString()
-            });
+            if (!state.chats[chatId].messages) {
+                state.chats[chatId].messages = [];
+            }
+
+            state.chats[chatId].messages.push(message);
+
+            // ✅ force re-render
+            state.chats = { ...state.chats };
         },
 
-        
         setcurrentChatId: (state, action) => {
             state.currentChatId = action.payload;
         },
 
-        
         setLoading: (state, action) => {
             state.isLoading = action.payload;
         },
-
 
         setError: (state, action) => {
             state.error = action.payload;
         },
 
-        
         setChats: (state, action) => {
             state.chats = action.payload;
         },

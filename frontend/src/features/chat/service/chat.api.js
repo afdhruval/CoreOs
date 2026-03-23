@@ -5,7 +5,7 @@ const api = axios.create({
     withCredentials: true
 })
 
-export const sendMessage = async ({ message, chat: chatId }) => {
+export const sendMessage = async ({ message, chatId }) => {
     const token = localStorage.getItem("token")
 
     const response = await api.post(

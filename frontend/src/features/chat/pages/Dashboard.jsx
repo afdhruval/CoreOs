@@ -50,11 +50,15 @@ const Dashboard = () => {
 
             <section className="flex-1 flex flex-col relative">
 
+                {/* console.log("CURRENT CHAT:", currentChatId);
+                console.log("CHATS:", chats);
+                console.log("MESSAGES:", chats[currentChatId]?.messages); */}
+
                 <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
 
-                    {chats[currentChatId]?.messages?.map((msg, i) => (
+                    {currentChatId && chats[currentChatId]?.messages?.map((msg, i) => (
                         <div
-                            key={i}
+                            key={msg._id || i}
                             className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm md:text-base ${msg.role === "user"
                                 ? "ml-auto bg-blue-600/80 text-white rounded-br-none"
                                 : "mr-auto bg-[#1e293b] text-white/90 rounded-bl-none"
