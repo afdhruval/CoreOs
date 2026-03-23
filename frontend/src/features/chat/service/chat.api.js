@@ -5,9 +5,19 @@ const api = axios.create({
     withCredentials: true
 })
 
-
 export const sendMessage = async ({ message, chatId }) => {
-    const response = await api.post("/api/chats/message", { message, chatId })
+    const token = localStorage.getItem("token")
+
+    const response = await api.post(
+        "/api/chats/message",
+        { message, chatId },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    )
+
     return response.data
 }
 

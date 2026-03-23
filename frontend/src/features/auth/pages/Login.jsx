@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../hook/useAuth'
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -11,16 +10,15 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
 
     const user = useSelector(state => state.auth.user)
-    const loadingg = useSelector(state => state.auth.loading)
+    const authLoading = useSelector(state => state.auth.loading)
 
     const navigate = useNavigate()
 
-    if (!loadingg && user) {
-        return <Navigate to="/" replace />  
+    const { handleLogin } = useAuth()
+
+    if (!authLoading && user) {
+        return <Navigate to="/" replace />
     }
-
-
-    const { handleLogin } = useAuth
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,24 +33,21 @@ const Login = () => {
             }
 
             await handleLogin(email, password)
-            // 👉 API call example
-            // const res = await fetch('/api/login', {...})
 
-            console.log("Login Data:", { email, password })
+            navigate("/")
 
         } catch (err) {
-            setError('Something went wrong')
+            console.error(err)
+            setError('Invalid email or password')
         } finally {
             setLoading(false)
         }
-
-        navigate("/")
     }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-black via-red-900/5 to-gray-900 flex items-center justify-center">
             <div className="w-full max-w-md bg-gradient-to-br from-gray-900/80 to-gray-800/70 rounded-2xl shadow-2xl border border-gray-800">
-                <div className="h-full flex flex-col">
+                <div className="flex flex-col">
 
                     {/* Header */}
                     <div className="h-28 flex flex-col items-center justify-center">
@@ -64,7 +59,7 @@ const Login = () => {
 
                     {/* Error */}
                     {error && (
-                        <div className="h-16 bg-red-900/20 border border-red-700/50 text-red-300 rounded-lg flex items-center justify-center w-72 mx-auto">
+                        <div className="h-16 bg-red-900/20 border border-red-700/50 text-red-300 rounded-lg flex items-center justify-center w-72 mx-auto mb-2">
                             {error}
                         </div>
                     )}
@@ -104,7 +99,7 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="h-12 w-72 mt-4 bg-gradient-to-r from-red-500 to-red-400 hover:from-red-600 text-white font-bold rounded-lg"
+                            className="h-12 w-72 mt-4 bg-gradient-to-r from-red-500 to-red-400 hover:from-red-600 text-white font-bold rounded-lg disabled:opacity-50"
                         >
                             {loading ? 'Logging in...' : 'Login'}
                         </button>
