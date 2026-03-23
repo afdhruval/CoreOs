@@ -21,19 +21,20 @@ export const useChat = () => {
 
             const { chat, aiMessage } = data;
 
-            dispatch(createNewChat({
-                chatId: chat._id,
-                title: "New Chat"
-            }));
+            if (!chatId)
+                dispatch(createNewChat({
+                    chatId: chat._id,
+                    title: "New Chat"
+                }));
 
             dispatch(addNewMessage({
-                chatId: chat._id,
+                chatId: chat._id || chatId,
                 content: message,
                 role: "user"
             }));
 
             dispatch(addNewMessage({
-                chatId: chat._id,
+                chatId: chat._id || chatId,
                 content: aiMessage,
                 role: "ai"
             }));
