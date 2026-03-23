@@ -6,7 +6,6 @@ export async function sendMessage(req, res) {
     try {
         const { message, chat: chatId } = req.body;
 
-        // ✅ auth check
         if (!req.user || !req.user.id) {
             return res.status(401).json({
                 message: "Unauthorized"
@@ -16,7 +15,6 @@ export async function sendMessage(req, res) {
         let title = null;
         let chat = null;
 
-        // ✅ create new chat if not exist
         if (!chatId) {
             title = await generateChattitle(message);
 
@@ -28,35 +26,29 @@ export async function sendMessage(req, res) {
 
         const currentChatId = chatId || chat._id;
 
-        // ✅ save user message
         await messageModel.create({
             chat: currentChatId,
             content: message,
             role: "user"
         });
 
-        // ✅ get all messages
         const messages = await messageModel.find({
             chat: currentChatId
         });
 
-        // ✅ format for AI
         const formattedMessages = messages.map(m => ({
             role: m.role === "ai" ? "assistant" : "user",
             content: m.content
         }));
 
-        // ✅ generate AI response
         const result = await generateMessage(formattedMessages);
 
-        // ✅ save AI message
         await messageModel.create({
             chat: currentChatId,
             content: result,
             role: "ai"
         });
 
-        // ✅ response
         res.status(201).json({
             chat: chat || { _id: currentChatId },
             title,
