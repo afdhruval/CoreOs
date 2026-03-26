@@ -1,4 +1,4 @@
-# CoreOS AI — Multi-LLM GenAI Search Engine
+# CoreOS — Multi-LLM GenAI Search Engine
 
 **CoreOS AI** is a next-generation **AI-powered search and assistant system** inspired by Perplexity AI, built using **Gemini, Mistral AI, LangChain, and a Multi-LLM architecture**.
 
@@ -137,35 +137,9 @@ LangChain is a framework for building applications powered by large language mod
 
 ---
 
-# 🚀 Future Improvements
-
-* Streaming responses
-* Voice assistant integration
-* Advanced AI agents
-* Tool calling (APIs, web search)
-* Fine-tuned models
-
----
-
-# 🤝 Contributing
-
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Submit a pull request
-
----
-
-# 📜 License
-
-MIT License
-
----
-
 # 👨‍💻 Author
 
 **Dhruval**
-Full Stack Developer | GenAI Engineer
 
 ---
 
