@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getChats, sendMessage, getMessages } from "../service/chat.api.js";
 
 import {
@@ -12,10 +12,36 @@ import {
 export const useChat = () => {
 
     const dispatch = useDispatch();
+    const user = useSelector(state => state.auth.user);
 
     async function handleSendMessage({ message, chatId }) {
         try {
             dispatch(setLoading(true));
+
+            let finalChatId = chatId || "guest_chat";
+
+            if (!user) {
+                // Guest mode: Mock chat
+                dispatch(addNewMessage({
+                    chatId: finalChatId,
+                    message: { role: "user", content: message }
+                }));
+
+                // Simulate AI delay
+                setTimeout(() => {
+                    dispatch(addNewMessage({
+                        chatId: finalChatId,
+                        message: { 
+                            role: "ai", 
+                            content: `I'm in **guest mode**. To save your chats and access GPT-4, please [Sign In](/login). \n\nYour message: "${message}"` 
+                        }
+                    }));
+                    dispatch(setLoading(false));
+                }, 1000);
+
+                dispatch(setcurrentChatId(finalChatId));
+                return;
+            }
 
             const res = await sendMessage({ message, chatId });
 
@@ -24,7 +50,7 @@ export const useChat = () => {
             const chat = res?.chat;
             const aiMessage = res?.aiMessage;
 
-            const finalChatId = chatId || chat?._id;
+            const apiChatId = chatId || chat?._id;
 
             // ✅ create chat if new
             if (!chatId && chat) {
@@ -36,7 +62,7 @@ export const useChat = () => {
 
             // ✅ USER MESSAGE
             dispatch(addNewMessage({
-                chatId: finalChatId,
+                chatId: apiChatId,
                 message: {
                     role: "user",
                     content: message
@@ -45,19 +71,21 @@ export const useChat = () => {
 
             // ✅ AI MESSAGE
             dispatch(addNewMessage({
-                chatId: finalChatId,
+                chatId: apiChatId,
                 message: {
                     role: aiMessage?.role || "ai",
                     content: aiMessage?.content || "No response"
                 }
             }));
 
-            dispatch(setcurrentChatId(finalChatId));
+            dispatch(setcurrentChatId(apiChatId));
 
         } catch (err) {
             console.error(err);
         } finally {
-            dispatch(setLoading(false));
+            if (user) {
+                dispatch(setLoading(false));
+            }
         }
     }
 
@@ -66,9 +94,6 @@ export const useChat = () => {
             dispatch(setLoading(true));
 
             const data = await getChats();
-            // console.log("GET CHATS RESPONSE:", data);
-
-            // ✅ FIX: correct key
             const chats = data?.chat || [];
 
             if (!Array.isArray(chats)) {

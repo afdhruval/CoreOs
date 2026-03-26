@@ -1,37 +1,26 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "/api/chats", 
     withCredentials: true
 })
 
-export const sendMessage = async ({ message, chatId }) => {
-    const token = localStorage.getItem("token")
-
-    const response = await api.post(
-        "/api/chats/message",
-        { message, chatId },
-        {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-    )
-
+export async function sendMessageApi({ message, chat, model }) {
+    const response = await api.post("/message", { message, chat, model })
     return response.data
 }
 
-export const getChats = async () => {
-    const response = await api.get("/api/chats")
+export async function getChatsApi() {
+    const response = await api.get("/")
     return response.data
 }
 
-export const getMessages = async (chatId) => {
-    const response = await api.get(`/api/chats/${chatId}/messages`)
+export async function getMessagesApi(chatId) {
+    const response = await api.get(`/${chatId}/messages`)
     return response.data
 }
 
-export const deleteChat = async (chatId) => {
-    const response = await api.delete(`/api/chats/delete/${chatId}`)
+export async function deleteChatApi(chatId) {
+    const response = await api.delete(`/delete/${chatId}`)
     return response.data
 }

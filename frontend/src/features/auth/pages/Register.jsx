@@ -1,135 +1,95 @@
 import React, { useState } from 'react'
+import { register } from '../service/auth.api'
+import { useNavigate, Link } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import './auth.scss'
 
 const Register = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setError('')
+        if (!username.trim() || !email.trim() || !password || password !== confirmPassword) return
         setLoading(true)
-
         try {
-            if (!username || !email || !password) {
-                setError('Please fill in all fields')
-                return
-            }
-
-            if (password.length < 6) {
-                setError('Password must be at least 6 characters')
-                return
-            }
-
-            // API call will be done here
-            console.log('Register attempt:', { username, email, password })
-
-            // Clear form on success
-            setUsername('')
-            setEmail('')
-            setPassword('')
+            await register({ username, email, password })
+            setSuccess(true)
+            toast.success('Check your email to verify your account.')
+            setUsername(''); setEmail(''); setPassword(''); setConfirmPassword('');
         } catch (err) {
-            setError(err.message || 'Registration failed')
-        } finally {
-            setLoading(false)
-        }
+            toast.error(err.response?.data?.message || 'Registration failed')
+        } finally { setLoading(false) }
     }
+
+    const handleGoogleLogin = () => {
+        const backendUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : `${window.location.protocol}//${window.location.hostname}:5000`;
+        window.location.href = `${backendUrl}/auth/google`;
+    }
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-black via-red-900/5 to-gray-900 flex items-center justify-center">
-            <div className="w-full max-w-md bg-gradient-to-br from-gray-900/80 to-gray-800/70 rounded-2xl shadow-2xl border border-gray-800">
-                <div className="h-full flex flex-col">
-                    <div className="h-28 flex flex-col items-center justify-center">
-                        <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-white">Register</h2>
-                        <div className="h-1 w-24 mt-4 rounded bg-gradient-to-r from-red-500 to-white" />
+        <div className="auth-modern-layout dark">
+            <div className="auth-card-modern">
+                <div className="auth-header-minimal">
+                    <span className="welcome-label">GET STARTED</span>
+                    <h1 className="main-title">Create your workspace</h1>
+                </div>
+
+                <form onSubmit={handleSubmit} className="auth-form-modern">
+                    <div className="modern-field">
+                        <label>Full name</label>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Ashmit T." />
                     </div>
 
-                    <div className="flex-1 flex flex-col w-full">
-                        {error && (
-                            <div className="h-16 bg-red-900/20 border border-red-700/50 text-red-300 rounded-lg flex items-center justify-center w-72 mx-auto">
-                                {error}
-                            </div>
-                        )}
+                    <div className="modern-field">
+                        <label>Email</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+                    </div>
 
-                        <form onSubmit={handleSubmit} className="flex-1 flex flex-col items-center w-full">
-                            <div className="h-24 w-full flex flex-col items-center justify-center">
-                                <label htmlFor="username" className="text-gray-300 font-medium h-6 text-center">
-                                    Username
-                                </label>
-                                <div className="h-2" />
-                                <input
-                                    id="username"
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    placeholder="Enter your username"
-                                    className="h-12 w-72 mx-auto bg-gray-800/50 text-white rounded-lg border border-gray-700 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-30 px-4 text-center placeholder-gray-500 transition duration-200"
-                                />
-                            </div>
-
-                            <div className="h-2" />
-
-                            <div className="h-24 w-full flex flex-col items-center justify-center">
-                                <label htmlFor="email" className="text-gray-300 font-medium h-6 text-center">
-                                    Email
-                                </label>
-                                <div className="h-2" />
-                                <input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    className="h-12 w-72 mx-auto bg-gray-800/50 text-white rounded-lg border border-gray-700 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-30 px-4 text-center placeholder-gray-500 transition duration-200"
-                                />
-                            </div>
-
-                            <div className="h-2" />
-
-                            <div className="h-24 w-full flex flex-col items-center justify-center">
-                                <label htmlFor="password" className="text-gray-300 font-medium h-6 text-center">
-                                    Password
-                                </label>
-                                <div className="h-2" />
-                                <input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter your password"
-                                    className="h-12 w-72 mx-auto bg-gray-800/50 text-white rounded-lg border border-gray-700 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500 focus:ring-opacity-30 px-4 text-center placeholder-gray-500 transition duration-200"
-                                />
-                            </div>
-
-                            <div className="h-6" />
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="h-12 w-72 mx-auto bg-gradient-to-r from-red-500 to-red-400 hover:from-red-600 hover:to-red-500 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold rounded-lg transition duration-200 shadow-lg hover:shadow-red-500/30"
-                            >
-                                {loading ? 'Registering...' : 'Register'}
+                    <div className="modern-field">
+                        <label>Password</label>
+                        <div className="input-with-icon">
+                            <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Min 6 characters" />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} className="eye-btn">
+                                <i className={showPassword ? "ri-eye-off-line" : "ri-eye-line"}></i>
                             </button>
-                        </form>
-
-                        <div className="h-6" />
-
-                        <div className="h-12 flex items-center justify-center">
-                            <p className="text-gray-400">
-                                Already have an account?{' '}
-                                <a href="/login" className="text-red-400 hover:text-red-300 font-medium transition duration-200">
-                                    Login here
-                                </a>
-                            </p>
                         </div>
-
-                        <div className="h-6" />
                     </div>
+
+                    <div className="modern-field">
+                        <label>Confirm Password</label>
+                        <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" />
+                    </div>
+
+                    {success ? (
+                        <div className="modern-success-box">
+                            <i className="ri-mail-check-line"></i>
+                            <span>Verify link sent to email</span>
+                        </div>
+                    ) : (
+                        <button type="submit" disabled={loading} className="modern-submit-btn">
+                            {loading ? 'Creating account...' : 'Create account →'}
+                        </button>
+                    )}
+                </form>
+
+                <div className="auth-divider-modern"><span>or</span></div>
+
+                <button onClick={handleGoogleLogin} className="google-auth-btn-modern">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                    Continue with Google
+                </button>
+
+                <div className="auth-switch-modern">
+                    <p>Already have an account? <Link to="/login">Sign in</Link></p>
                 </div>
             </div>
         </div>
     )
 }
-
 export default Register

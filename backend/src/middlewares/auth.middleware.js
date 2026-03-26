@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 
 export function authUser(req, res, next) {
-
     const token = req.cookies.token;
-
 
     if (!token) {
         return res.status(401).json({
@@ -14,17 +12,26 @@ export function authUser(req, res, next) {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-
         req.user = decoded;
-
         next();
     } catch (err) {
         console.log("JWT ERROR:", err.message);
-
         return res.status(401).json({
             message: "unauthorized",
             success: false
         });
+    }
+}
+
+export function maybeAuthUser(req, res, next) {
+    const token = req.cookies.token;
+    if (!token) return next();
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        // Continue even if token is invalid, but don't set req.user
+        next();
     }
 }

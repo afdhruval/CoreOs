@@ -18,12 +18,23 @@ const userSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: true,
             minlength: 6
+            // Not required for Google users
+        },
+        googleId: {
+            type: String,
+            unique: true,
+            sparse: true // Allows multiple users to have no googleId
         },
         verified: {
             type: Boolean,
             default: false
+        },
+        otp: {
+            type: String,
+        },
+        otpExpiry: {
+            type: Date,
         }
     },
     {
@@ -32,12 +43,13 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function () {
-    if (!this.isModified("password")) return;
+    if (!this.isModified("password") || !this.password) return;
 
     this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.comparepassword = function (candidatepassword) {
+    if (!this.password) return false;
     return bcrypt.compare(candidatepassword, this.password);
 };
 

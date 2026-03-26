@@ -13,6 +13,6 @@ initSocket(httpServer)
 
 connectTOdb()
 
-httpServer.listen(3000, () => {
-    console.log("server is running on 3000");
+httpServer.listen(5000, () => {
+    console.log("server is running on 5000");
 })
