@@ -1,138 +1,180 @@
-# Perplexity AI(Mistral + LangChain + Multi-LLM)
+# CoreOS AI — Multi-LLM GenAI Search Engine
 
-A powerful **GenAI-based search assistant** inspired by Perplexity AI.  
-This project leverages **Mistral AI**, **LangChain**, and multiple LLMs to provide **intelligent, context-aware answers** to user queries.
+**CoreOS AI** is a next-generation **AI-powered search and assistant system** inspired by Perplexity AI, built using **Gemini, Mistral AI, LangChain, and a Multi-LLM architecture**.
 
----
-
-## 🚀 Overview
-
-This application acts as an **AI-powered search engine** that:
-- Accepts user queries
-- Retrieves relevant information
-- Uses LLMs to generate accurate, summarized, and contextual responses
-
-It combines **retrieval + reasoning**, making it more powerful than traditional search systems.
+It combines **Retrieval-Augmented Generation (RAG)** with multiple LLMs to deliver **accurate, context-aware, and intelligent responses** in real-time.
 
 ---
 
-## 🧠 Key Features
+# 🧠 Core Idea
 
-- 🔍 Smart Query Understanding  
-- 🤖 Multi-LLM Support (Mistral + other LLMs)  
-- 🔗 LangChain Integration  
-- 📚 Context-Aware Responses  
-- 🧠 Memory Support (optional)  
-- ⚡ Fast & Scalable  
+Traditional Search Engine  → Links
+CoreOS AI → **Answers + Context + Reasoning**
 
----
+CoreOS AI:
 
-## 🏗️ Tech Stack
-
-- Node.js  
-- LangChain  
-- Mistral AI  
-- Other LLM APIs  
-- JavaScript  
+* Understands user intent
+* Retrieves relevant knowledge
+* Uses multiple LLMs (Gemini + Mistral)
+* Generates refined, contextual answers
 
 ---
 
-## ⚙️ How It Works
+#  Key Features
 
-1. User enters a query  
-2. Query is processed using LangChain  
-3. System may:
-   - Retrieve relevant data (RAG approach)
-   - Pass query through multiple LLMs  
-4. LLM generates a refined response  
-5. Final answer is returned to the user  
+### Smart Query Understanding
+
+* Natural language processing using LangChain
+* Intent-based query handling
+
+###  Multi-LLM Architecture
+
+* **Gemini** → Fast + large context handling
+* **Mistral AI** → Strong reasoning + accuracy
+* Combined outputs → Better responses
+
+###  RAG (Retrieval-Augmented Generation)
+
+* Fetches relevant data chunks
+* Reduces hallucinations
+* Improves accuracy
+
+###  Memory Support (Optional)
+
+* Maintains conversation history
+* Enables multi-turn conversations
+
+###  High Performance
+
+* Optimized for speed and scalability
+* Efficient API usage
 
 ---
 
-## 📂 Project Structure
+#  Tech Stack
 
-project-root/
-
-├── src/
-│   ├── chains/        # LangChain logic
-│   ├── models/        # LLM configurations
-│   ├── tools/         # Custom tools (search, APIs)
-│   ├── utils/         # Helper functions
-│   └── index.js       # Entry point
-
-├── .env
-├── package.json
-└── README.md
-
+* **Frontend:** React.js
+* **Backend:** Node.js, Express
+* **LLMs:** Gemini API, Mistral AI
+* **Framework:** LangChain
+* **Database:** MongoDB
+* **Vector DB (optional):** Pinecone
+* **Authentication:** JWT
 
 ---
 
-## 🔑 Environment Variables
+# ⚙️ System Architecture
 
-Create a `.env` file in the root directory:
+User Query
+↓
+LangChain Processing
+↓
+RAG (Retrieve Context)
+↓
+Multi-LLM Execution
+↓
+Response Aggregation
+↓
+Final Answer
 
+---
 
-MISTRAL_API_KEY=your_mistral_key
-OTHER_LLM_API_KEY=your_other_llm_key
+# 🛠️ Installation & Setup
 
+### 1. Clone the Repository
 
+git clone https://github.com/afdhruval/perplexity.git
+cd perplexity
 
-
-## 🛠️ Installation & Setup
-
-### 1. Clone the repository
-
-git clone (https://github.com/afdhruval/perplexity/tree/main)
-cd perplexity-ai
-
-
-### 2. Install dependencies
+### 2. Install Dependencies
 
 npm install
 
+### 3. Setup Environment Variables
 
-### 3. Add environment variables
-Create a `.env` file (see above)
+Create a `.env` file and add your API keys
 
-### 4. Run the project
+### 4. Run Backend
 
 npm run dev
 
+### 5. Run Frontend
 
-
-
-## 💡 Example Usage
-
-Ask: What is LangChain?
-
-Response:
-LangChain is a framework used to build applications powered by LLMs. It helps in chaining models, tools, and memory to build intelligent AI systems.
-
-
-
-
-## 🔍 Use Cases
-
-- AI-powered search engine  
-- Chatbot with reasoning capabilities  
-- Research assistant  
-- Knowledge-based Q&A system  
-
----
-## 🤝 Contributing
-
-1. Fork the repository  
-2. Create a new branch  
-3. Make your changes  
-4. Submit a pull request  
+cd frontend
+npm run dev
 
 ---
 
-## 📜 License
+# 💡 Example Usage
 
-MIT License  
+### Input:
+
+What is LangChain?
+
+### Output:
+
+LangChain is a framework for building applications powered by large language models. It enables chaining of models, tools, and memory to create intelligent AI systems.
 
 ---
 
-## 👨‍💻 Author
-Dhruval  
+# 🔍 Use Cases
+
+* AI-powered search engine
+* Chatbot with reasoning capabilities
+* Research assistant
+* Document-based Q&A (PDF RAG)
+* Knowledge assistant
+
+---
+
+# 🔥 Unique Highlights
+
+* Multi-LLM system (Gemini + Mistral)
+* RAG-based architecture
+* Scalable backend design
+* Real-world AI system implementation
+* Context-aware intelligent responses
+
+---
+
+# 🚀 Future Improvements
+
+* Streaming responses
+* Voice assistant integration
+* Advanced AI agents
+* Tool calling (APIs, web search)
+* Fine-tuned models
+
+---
+
+# 🤝 Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+---
+
+# 📜 License
+
+MIT License
+
+---
+
+# 👨‍💻 Author
+
+**Dhruval**
+Full Stack Developer | GenAI Engineer
+
+---
+
+# ⭐ Final Note
+
+CoreOS AI demonstrates:
+
+* Real-world **GenAI architecture**
+* Practical use of **RAG + Multi-LLM**
+* Scalable AI system design
+
+---
